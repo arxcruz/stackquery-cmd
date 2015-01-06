@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+
+import argparse
+import stackquery.common as common
+import stackquery.table as table
+import sys
+
+'''
+The intent of this tool is create a report based on stackalytics web site.
+
+Examples of usage:
+
+Using config file (you need to have a list of users option in the DEFAULT
+section):
+    stackquery --config config.ini
+
+Using config file and list of users:
+    stackquery --config config.ini --engineer=arxcruz,afazekas
+
+Without config file:
+    stackquery --engineer=arxcruz,afazekas
+
+Using config file and a team:
+    stackquery --config config.ini --team=qe
+
+Generating output in html:
+    stackquery --config config.ini --team=qe --html
+
+Showing metrics only:
+    stackquery --config config.ini --team=qe --metric
+
+Showing metrics and results per release
+    stackquery --config config.ini --team=qe --all
+'''
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Stack query tool')
+    group = parser.add_mutually_exclusive_group()
+
+    parser.add_argument('-c', '--config', help='INI config file')
+    parser.add_argument('-r', '--release',
+                        help='Release version, default is all')
+    parser.add_argument('-p', '--project-type',
+                        help='Project name. Default is openstack',
+                        choices=['all', 'openstack', 'integrated',
+                                 'incubated', 'other', 'stackforge'])
+    parser.add_argument('-m', '--module',
+                        help='Module name. Default is all', default=None)
+    parser.add_argument('--company',
+                        help='Company name. Default is Red Hat of course ;)')
+    group.add_argument('-u', '--users',
+                       help='Engineer id. Can be several, separated by comma. '
+                            'Ex: user1,user2,user3')
+    group.add_argument('-t', '--team',
+                       help='Group of users, set in config file')
+    parser.add_argument('--metric', action='store_true',
+                        help='Metric to be used. Default is commits')
+    parser.add_argument('--html', action='store_true',
+                        help='Shows the output in html format')
+    parser.add_argument('--all', action='store_true',
+                        help='Shows both metric and normal tables')
+
+    args = parser.parse_args()
+
+    # There is a much more elaborated and complicated way to do this using
+    # argparse, but I prefer do a if than 30 lines of code
+
+    if args.team and not args.config:
+        parser.print_help()
+        print "You need to specify a config file when " \
+              "you're using -t/--team argument"
+        sys.exit()
+
+    return args
+
+
+def main():
+    # Get the args
+    args = parse_arguments()
+
+    # Load config if exists
+
+    config = common.load_config_file(args.config)
+    teams = common.load_teams_from_config(config, args)
+
+    for team in teams:
+        if args.team:
+            if team.team_name in args.team.split(','):
+                if not team.users:
+                    print "Team %s doesn't have a list of users in config " \
+                          "file, or you didn't specify the -e/--engineer " \
+                          "argument" % team
+                    sys.exit(-1)
+
+                table.print_table(team, args.metric, args.html, args.all)
+
+        else:
+            table.print_table(team, args.metric, args.html, args.all)
+
+
+if __name__ == "__main__":
+    main()
