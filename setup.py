@@ -41,7 +41,7 @@ setuptools.setup(
     version=stackquery.__version__,
     author='Arx Cruz',
     author_email='acruz@redhat.com',
-    url='https://github.com/mkollaro/launchpadstats',
+    url='https://github.com/arxcruz/stackquery',
     packages=['stackquery'],
     license='Apache License, Version 2.0',
     scripts=['bin/stackquery'],
