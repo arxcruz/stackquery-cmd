@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% from 'common.html' import list_users %}
+
+{% block title %}Select your query{% endblock title%}
+
+{% block main %}
+    <form method="POST" class="form-inline">
+        <label for="release">Release:</label>
+        <select name="release" id="release">
+            <option value="all">All</option>
+            <option value="kilo">Kilo</option>
+            <option value="juno">Juno</option>
+            <option value="icehouse">Icehouse</option>
+            <option value="havana">Havana</option>
+            <option value="grizzly">Grizzly</option>
+            <option value="folsom">Folsom</option>
+        </select>
+        <label for="project_type">Project type:</label>
+        <select name="project_type" id="project_type">
+            <option value="all">All</option>
+            <option value="openstack">Openstack</option>
+            <option value="stackforge">Stackforge</option>
+        </select>
+        <label for="project_type">Type:</label>
+        <select name="project_type" id="project_type">
+            <option value="metric">Metrics</option>
+            <option value="group">Group Summary</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Go</button>
+    </form>
+{% if users %}
+<div>
+{{ list_users(users) }}
+</div>
+{% endif %}
+{% endblock main %}

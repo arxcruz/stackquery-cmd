@@ -254,6 +254,7 @@ def get_status_from_users(users, company, project_type,
         parameters['user_id'] = user
         user_info = stackalytics.get_stats(parameters)
         if user_info:
-            user_list.append(user_info.get('contribution'))
+            user_info['contribution']['user'] = user
+            user_list.append(user_info['contribution'])
 
     return user_list
