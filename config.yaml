@@ -1,0 +1,21 @@
+teams:
+  - name: A Team
+    releases:
+      - juno
+      - icehouse
+    company: Red Hat
+    module: all
+    project_type: openstack
+    metric: commits
+    users:
+      - arxcruz
+  - name: Another team
+    releases:
+      - icehouse
+      - all
+    company: Red Hat
+    module: all
+    project_type: stackforge
+    metric: commits
+    users:
+      - arxcruz
