@@ -3,8 +3,9 @@ from flask import render_template
 from flask import request
 
 import stackquery.common as common
+from models import Team
 
-dashboard = Blueprint('dashboard', __name__, url_prefix='/')
+dashboard = Blueprint('dashboard', __name__)
 
 
 @dashboard.route('/', methods=['GET', 'POST'])
@@ -18,3 +19,9 @@ def dashboard_index():
         return render_template('index.html', users=users)
     else:
         return render_template('index.html')
+
+
+@dashboard.route('/teams/')
+def dashboard_teams():
+    teams = Team.query.all()
+    return render_template('list_teams.html', teams=teams)

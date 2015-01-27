@@ -2,7 +2,7 @@
 
 {% from 'common.html' import list_users %}
 
-{% block title %}Select your query{% endblock title%}
+{% block title %}Stackquery - Reports{% endblock title%}
 
 {% block java_script %}
 <script type="text/javascript">
@@ -27,12 +27,14 @@
 
 $(document).ready(function(){
     $("#release").load(loadComboBox("#release", "{{ url_for('rest_api.get_releases') }}", {}, 'id', 'name'));
+    $("#team").load(loadComboBox("#team", "{{ url_for('rest_api.get_teams') }}", {}, 'name', 'name'))
 });
 </script>
 
 {% endblock java_script %}
 
 {% block main %}
+<div class="well">
     <form method="POST" class="form-inline">
         <label for="release">Release:</label>
         <select name="release" id="release">
@@ -48,8 +50,12 @@ $(document).ready(function(){
             <option value="metric">Metrics</option>
             <option value="group">Group Summary</option>
         </select>
+        <label for="team">Team:</label>
+        <select name="team" id="team">
+        </select>
         <button type="submit" class="btn btn-primary">Go</button>
     </form>
+</div>
 {% if users %}
 <div>
 {{ list_users(users) }}

@@ -1,7 +1,8 @@
+from collections import OrderedDict
 from datetime import datetime
 
 from sqlalchemy import Boolean, Column
-from sqlalchemy import DateTime, Integer, String, Text
+from sqlalchemy import DateTime, Integer, String, Text, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import ForeignKey
 from sqlalchemy.orm import synonym, relationship
@@ -9,16 +10,31 @@ from sqlalchemy.orm import synonym, relationship
 from database import Base
 
 
-class Team(Base):
+class DictSerializable(object):
+    def _asdict(self):
+        result = OrderedDict()
+        for key in self.__mapper__.c.keys():
+            result[key] = getattr(self, key)
+        return result
+
+user_team_association = Table('user_team_association', Base.metadata,
+                              Column('user_id', Integer,
+                                     ForeignKey('user.id')),
+                              Column('team_id', Integer,
+                                     ForeignKey('team.id')))
+
+
+class Team(Base, DictSerializable):
     '''Team database representation'''
     __tablename__ = 'team'
     id = Column(Integer, primary_key=True)
     created = Column(DateTime, default=datetime.now)
     modified = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     name = Column('name', String(200))
+    users = relationship('User', secondary=user_team_association)
 
 
-class Release(Base):
+class Release(Base, DictSerializable):
     '''Release database representation'''
     __tablename__ = 'release'
     id = (Column(Integer, primary_key=True))
@@ -35,7 +51,7 @@ class Release(Base):
         }
 
 
-class User(Base):
+class User(Base, DictSerializable):
     '''User database representation'''
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
