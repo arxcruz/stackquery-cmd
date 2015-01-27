@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% from 'common.html' import detail_team %}
+
+{% block title %}Stackquery - List teams{% endblock title%}
+
+{% block java_script %}
+
+{% endblock java_script %}
+
+{% block main %}
+
+{% for team in teams %}
+    <div class="span12">{{ detail_team(team) }}</div>
+{% endfor %}
+
+{% endblock main %}
