@@ -44,21 +44,28 @@
 
 {% macro detail_team(team) %}
 <div class="team-detail">
-    <h3><i class="icon-asterisk"></i> {{ team.name }}</h3>
+    <h3>{{ team.name }}</h3>
 
-    <div class="row">
     {% if team.users %}
         {% for user in team.users %}
-            <p class="span5">{{ user.name }}</p>
+            <div class="row">
+                <p class="span6">{{ user.name }}
+                    <a class="appointment-delete-link" href="#" data-delete-url="#">
+                        <i class="icon-remove"></i>
+                    </a>
+                </p>
+            </div>
         {% endfor %}
     {% else %}
-        <p class="span5">No users</p>
+        <div class="row">
+            <p class="span5">No users</p>
+        </div>
     {% endif %}
-    </div>
     <div class="edit-controls">
         <i class="icon-pencil"></i><a href="#">Edit</a>
         <span class="inline-pad"></span>
         <i class="icon-trash"></i><a class="appointment-delete-link" href="#" data-delete-url="#">Delete</a>
     </div>
+    <hr>
 </div>
 {% endmacro %}

@@ -43,7 +43,13 @@ def init_db():
 
     # Populating team
     team = models.Team()
-    team.name = 'Demo team'
+    team.name = 'Demo team 1'
+    team.users.append(user1)
+    team.users.append(user2)
+    db_session.add(team)
+
+    team = models.Team()
+    team.name = 'Demo team 2'
     team.users.append(user1)
     team.users.append(user2)
     db_session.add(team)
