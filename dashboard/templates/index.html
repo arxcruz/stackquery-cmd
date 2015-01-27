@@ -4,17 +4,38 @@
 
 {% block title %}Select your query{% endblock title%}
 
+{% block java_script %}
+<script type="text/javascript">
+    function loadComboBox(select, url, data, json_key, json_value) {
+      $.ajax({
+         type: "GET",
+         url: url,
+         data: data,
+         dataType: "json",
+         success: function(json){
+            var options = "";
+            $.each(json, function(key, value){
+                console.log(value['id']);
+                $(select).append($("<option>", {
+                    value: value[json_value].toLowerCase(),
+                    text: value[json_value]
+                }));
+            });
+         }
+      });
+   }
+
+$(document).ready(function(){
+    $("#release").load(loadComboBox("#release", "{{ url_for('rest_api.get_releases') }}", {}, 'id', 'name'));
+});
+</script>
+
+{% endblock java_script %}
+
 {% block main %}
     <form method="POST" class="form-inline">
         <label for="release">Release:</label>
         <select name="release" id="release">
-            <option value="all">All</option>
-            <option value="kilo">Kilo</option>
-            <option value="juno">Juno</option>
-            <option value="icehouse">Icehouse</option>
-            <option value="havana">Havana</option>
-            <option value="grizzly">Grizzly</option>
-            <option value="folsom">Folsom</option>
         </select>
         <label for="project_type">Project type:</label>
         <select name="project_type" id="project_type">
