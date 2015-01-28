@@ -36,7 +36,14 @@
        						<li><a href="#">Create new Team</a></li>
       					</ul>
       				</li>
-      				<li><a href="{{ url_for('dashboard.dashboard_users') }}">Users</a></li>
+      				<li class="dropdown">
+      					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Users<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+        					<li><a href="{{ url_for('dashboard.dashboard_users') }}">List</a></li>
+        					<li class="divider"></li>         					
+       						<li><a href="#">Create new User</a></li>
+      					</ul>
+      				</li>
    				</ul>
 			</div>
 		</div>
