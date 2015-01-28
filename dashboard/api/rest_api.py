@@ -1,4 +1,5 @@
 from flask import Blueprint
+
 from models import Release
 from models import Team
 from models import User
