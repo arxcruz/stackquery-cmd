@@ -69,3 +69,13 @@
     <hr>
 </div>
 {% endmacro %}
+
+{% macro detail_user(user) %}
+<div class="row-fluid">
+    <p class="span6">{{ user.name }}
+        <a class="appointment-delete-link" href="#" data-delete-url="#">
+            <i class="icon-remove"></i>
+        </a>
+    </p>
+</div>
+{% endmacro %}
