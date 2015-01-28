@@ -1,7 +1,7 @@
 from flask import Blueprint
-from flask import jsonify
 from models import Release
 from models import Team
+from models import User
 
 import simplejson as json
 
@@ -22,3 +22,9 @@ def get_releases():
 def get_teams():
     teams = Team.query.all()
     return json.dumps(list(teams), default=date_handler)
+
+
+@rest_api.route('/api/users/')
+def get_users():
+    users = User.query.all()
+    return json.dumps(list(users), default=date_handler)
