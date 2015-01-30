@@ -1,11 +1,13 @@
 from flask import Blueprint
 from flask import render_template
 from flask import request
+from flask import flash
 
 import stackquery.common as common
 from database import db_session
 from models import Team
 from models import User
+from forms import UserForm
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -40,3 +42,16 @@ def dashboard_users():
 
     users = User.query.all()
     return render_template('list_users.html', users=users)
+
+@dashboard.route('/users/create/', methods=['GET', 'POST'])
+def dashboard_create_user():
+    form = UserForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User()
+        user.user_id = form.user_id.data
+        user.name = form.name.data
+        user.email = form.email.data
+        db_session.add(user)
+        db_session.commit()
+        flash('User created successfully')
+    return render_template('create_user.html', form=form)
