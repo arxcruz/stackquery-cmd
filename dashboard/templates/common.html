@@ -64,18 +64,21 @@
     <div class="edit-controls">
         <i class="icon-pencil"></i><a href="#">Edit</a>
         <span class="inline-pad"></span>
-        <i class="icon-trash"></i><a class="appointment-delete-link" href="#" data-delete-url="#">Delete</a>
+        <i class="icon-trash"></i><a class="team-delete-link" href="#" data-delete-url="#">Delete</a>
     </div>
     <hr>
 </div>
 {% endmacro %}
 
 {% macro detail_user(user) %}
-<div class="row-fluid">
-    <p class="span6">{{ user.name }}
-        <a class="appointment-delete-link" href="#" data-delete-url="#">
-            <i class="icon-remove"></i>
+<tr>
+    <td>{{ user.name }}</td>
+    <td>{{ user.user_id }}</td>
+    <td>{{ user.email }}</td>
+    <td user-id="{{ user.id }}">
+        <a class="user-delete-link" href="#" data-delete-url="{{ url_for('rest_api.delete_user', user_id=user.id) }}">
+            <i class="icon-trash"></i>
         </a>
-    </p>
-</div>
+    </td>
+</tr>
 {% endmacro %}
