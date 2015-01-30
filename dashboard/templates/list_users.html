@@ -5,25 +5,50 @@
 {% block title %}Stackquery - List users{% endblock title%}
 
 {% block java_script %}
+<script type="text/javascript">
+	$(function() {
+		$(".user-delete-link").on("click", function() {
+			var delete_url = $(this).attr('data-delete-url');
+			var delete_row = $(this).parent().parent();
+			$.ajax({
+				url: delete_url,
+				type: "DELETE",
+				success: function(response) {
+					if (response.status == "OK") {
+						delete_row.remove();
+						$("#user-success").show();
+					}
+				},
+				error: function(response) {
+					$("#user-failure").show();
+				}
+			})
+		})
+	});
 
+</script>
 {% endblock java_script %}
 
 {% block main %}
-<form method="POST">
-	<div class="row-fluid">
-		<div class="col-lg-3">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Add new user" name="user_name" id="user_name">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit">Add</button>
-				</span>
-			</div>
-		</div>
-	</div>
-</form>
-{% if users %}
+
+<table class="table table-striped">
+	<tr>
+        <td>Name</td>
+        <td>User id</td>
+        <td>email</td>
+        <td></td>
+    </tr>
 {% for user in users %}
-    <div class="span11">{{ detail_user(user) }}</div>
+	{{ detail_user(user) }}
 {% endfor %}
-{% endif %}
+</table>
+
+<div class="alert alert-success fade in" id="user-success" style="display:none;">
+    <button type="button" class="close" onclick="$(this).parent().hide();">×</button>
+    User deleted successfully
+</div>
+<div class="alert alert-error fade in" id="user-failure" style="display:none;">
+    <button type="button" class="close" onclick="$(this).parent().hide();">×</button>
+    An error occurred
+</div>
 {% endblock main %}
