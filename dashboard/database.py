@@ -33,12 +33,22 @@ def init_db():
 
     # Populating User table
     user1 = models.User()
-    user1.name = 'arxcruz'
+    user1.name = 'Arx Cruz'
+    user1.email = 'arxcruz@test.com'
+    user1.user_id = 'arxcruz'
     db_session.add(user1)
 
     user2 = models.User()
-    user2.name = 'david-kranz'
+    user2.name = 'David Kranz'
+    user2.email = 'david@test.com'
+    user2.user_id = 'david-kranz'
     db_session.add(user2)
+
+    user3 = models.User()
+    user3.name = 'Arx Cruz Delete'
+    user3.email = 'arxcruz@test.com'
+    user3.user_id = 'arxcruz'
+    db_session.add(user3)
     db_session.commit()
 
     # Populating team
