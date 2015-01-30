@@ -1,5 +1,8 @@
 from flask import Blueprint
+from flask import request
+from flask import jsonify
 
+from database import db_session
 from models import Release
 from models import Team
 from models import User
@@ -29,3 +32,17 @@ def get_teams():
 def get_users():
     users = User.query.all()
     return json.dumps(list(users), default=date_handler)
+
+@rest_api.route('/api/users/<int:user_id>/delete/', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        request = jsonify({'status': 'Not Found'})
+        request.status = 404
+        return request
+
+    #db_session.delete(user)
+    #db_session.commit()
+    return jsonify({'status': 'OK'})
+
+
