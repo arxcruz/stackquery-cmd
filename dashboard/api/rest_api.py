@@ -41,8 +41,8 @@ def delete_user(user_id):
         request.status = 404
         return request
 
-    #db_session.delete(user)
-    #db_session.commit()
+    db_session.delete(user)
+    db_session.commit()
     return jsonify({'status': 'OK'})
 
 
