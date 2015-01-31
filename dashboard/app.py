@@ -9,6 +9,7 @@ def create_app():
     app = Flask(__name__)
     app.config['DEBUG'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///stackquery.db'
+    app.secret_key = 'why would I tell you my secret key?'
 
     #db.init_app(app)
     filters.init_app(app)
