@@ -23,11 +23,47 @@ def init_db():
     db_session.add(release)
 
     release = models.Release()
+    release.name = 'Kilo'
+    db_session.add(release)
+
+    release = models.Release()
     release.name = 'Juno'
     db_session.add(release)
 
     release = models.Release()
     release.name = 'Icehouse'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Havana'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Grizzly'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Folsom'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Essex'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Diablo'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Cactus'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Bexar'
+    db_session.add(release)
+
+    release = models.Release()
+    release.name = 'Austin'
     db_session.add(release)
     db_session.commit()
 

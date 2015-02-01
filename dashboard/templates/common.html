@@ -1,18 +1,63 @@
-{% macro list_users(users) %}
-<table class="table table-striped">
-  <tr>
-        <td>User</td>
-        <td>Total commits</td>
-        <td>Total LOC</td>
-        <td>Change Requests</td>
-        <td>Patch Sets</td>
-        <td>Marks</td>
-        <td>Draft Blueprints</td>
-        <td>Completed Blueprints</td>
-        <td>Filed Bugs</td>
-        <td>Resolved Bugs</td>
-        <td>Emails</td>
-    </tr>
+{% macro list_users(users, metric, release) %}
+{% if metric %}
+
+    {% set drafted_blueprint_count = users|sum(attribute='drafted_blueprint_count') %}
+    {% set completed_blueprint_count = users|sum(attribute='completed_blueprint_count') %}
+    {% set filed_bug_count = users|sum(attribute='filed_bug_count') %}
+    {% set resolved_bug_count = users|sum(attribute='resolved_bug_count') %}
+    {% set total = [drafted_blueprint_count, completed_blueprint_count, filed_bug_count, resolved_bug_count] |sum() %}
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <td>Metric</td>
+            <td>Release {{ release }}</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Drafted blueprints</td>
+            <td>{{ drafted_blueprint_count }}</td>
+        </tr>
+        <tr>
+            <td>Completed blueprints</td>
+            <td>{{ completed_blueprint_count }}</td>
+        </tr>
+        <tr>
+            <td>Bugs filled</td>
+            <td>{{ filed_bug_count }}</td>
+        </tr>
+        <tr>
+            <td>Bugs resolved</td>
+            <td>{{ resolved_bug_count }}</td>
+        </tr>
+        <tr class="warning">
+            <td>Total</td>
+            <td>{{ total }}</td>
+        </tr>
+    </tbody>
+</table>
+    {% else %}
+<div class="row">
+    <h4>Results for release {{ release }}</h2>
+</div>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <td>User</td>
+            <td>Total commits</td>
+            <td>Total LOC</td>
+            <td>Change Requests</td>
+            <td>Patch Sets</td>
+            <td>Marks</td>
+            <td>Draft Blueprints</td>
+            <td>Completed Blueprints</td>
+            <td>Filed Bugs</td>
+            <td>Resolved Bugs</td>
+            <td>Emails</td>
+        </tr>
+    </thead>
+    <tbody>
     {% for user in users %}
         {% set user_id = user.get('user') %}
         {% set commit_count = user.get('commit_count') %}
@@ -39,7 +84,9 @@
             <td>{{ email_count }}</td>
         </tr>
     {% endfor %}
+    </tbody>
 </table>
+{% endif %}
 {% endmacro %}
 
 {% macro detail_team(team) %}
@@ -50,7 +97,7 @@
         {% for user in team.users %}
             <div class="row">
                 <p class="span6">{{ user.name }}
-                    <a class="appointment-delete-link" href="#" data-delete-url="#">
+                    <a class="user-delete-link" href="#" data-delete-url="{{ url_for('rest_api.delete_user_from_team', team_id=team.id, user_id=user.id) }}">
                         <i class="icon-remove"></i>
                     </a>
                 </p>
@@ -62,9 +109,9 @@
         </div>
     {% endif %}
     <div class="edit-controls">
-        <i class="icon-pencil"></i><a href="#">Edit</a>
+        <i class="icon-pencil"></i><a href="{{ url_for('dashboard.dashboard_edit_team', team_id=team.id) }}">Edit</a>
         <span class="inline-pad"></span>
-        <i class="icon-trash"></i><a class="team-delete-link" href="#" data-delete-url="#">Delete</a>
+        <i class="icon-trash"></i><a class="team-delete-link" href="#" data-delete-url="{{ url_for('rest_api.delete_team', team_id=team.id) }}">Delete</a>
     </div>
     <hr>
 </div>

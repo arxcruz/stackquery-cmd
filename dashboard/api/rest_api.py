@@ -33,6 +33,7 @@ def get_users():
     users = User.query.all()
     return json.dumps(list(users), default=date_handler)
 
+
 @rest_api.route('/api/users/<int:user_id>/delete/', methods=['DELETE'])
 def delete_user(user_id):
     user = User.query.get(user_id)
@@ -46,3 +47,39 @@ def delete_user(user_id):
     return jsonify({'status': 'OK'})
 
 
+@rest_api.route('/api/teams/<int:team_id>/delete', methods=['DELETE'])
+def delete_team(team_id):
+    team = Team.query.get(team_id)
+    if team is None:
+        request = jsonify({'status': 'Not Found'})
+        request.status = 404
+        return request
+
+    db_session.delete(team)
+    db_session.commit()
+    return jsonify({'status': 'OK'})
+
+
+@rest_api.route('/api/teams/<int:team_id>/<int:user_id>/delete', methods=['DELETE'])
+def delete_user_from_team(team_id, user_id):
+    team = Team.query.get(team_id)
+    user = User.query.get(user_id)
+    if team is None or user is None:
+        request = jsonify({'status': 'Not Found'})
+        request.status = 404
+        return request
+
+    team.users.remove(user)
+    db_session.commit()
+    return jsonify({'status': 'OK'})
+
+
+@rest_api.route('/api/teams/<int:team_id>/users/')
+def get_users_from_team(team_id):
+    team = Team.query.get(team_id)
+    if team is None:
+        request = jsonify({'status': 'Not Found'})
+        request.status = 404
+        return request
+
+    return json.dumps(list(team.users), default=date_handler)

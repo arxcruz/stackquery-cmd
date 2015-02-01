@@ -15,9 +15,8 @@
          success: function(json){
             var options = "";
             $.each(json, function(key, value){
-                console.log(value['id']);
                 $(select).append($("<option>", {
-                    value: value[json_value].toLowerCase(),
+                    value: value[json_key].toString().toLowerCase(),
                     text: value[json_value]
                 }));
             });
@@ -26,8 +25,8 @@
    }
 
 $(document).ready(function(){
-    $("#release").load(loadComboBox("#release", "{{ url_for('rest_api.get_releases') }}", {}, 'id', 'name'));
-    $("#team").load(loadComboBox("#team", "{{ url_for('rest_api.get_teams') }}", {}, 'name', 'name'))
+    $("#release").load(loadComboBox("#release", "{{ url_for('rest_api.get_releases') }}", {}, 'name', 'name'));
+    $("#team").load(loadComboBox("#team", "{{ url_for('rest_api.get_teams') }}", {}, 'id', 'name'))
 });
 </script>
 
@@ -52,7 +51,7 @@ $(document).ready(function(){
         </div>
         <div class="span3">
             <label for="project_type">Type:</label>
-            <select class="form-control" name="project_type" id="project_type">
+            <select class="form-control" name="type" id="type">
                 <option value="metric">Metrics</option>
                 <option value="group">Group Summary</option>
             </select>
@@ -70,7 +69,7 @@ $(document).ready(function(){
 
 {% if users %}
 <div>
-{{ list_users(users) }}
+{{ list_users(users, metric, release) }}
 </div>
 {% endif %}
 {% endblock main %}
